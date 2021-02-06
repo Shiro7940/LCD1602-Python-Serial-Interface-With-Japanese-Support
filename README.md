@@ -19,6 +19,10 @@ Input content: アイラ
 Convert kanji?: n
 ｱｲﾗ
 Input to Exit: 
+Input content: -プラスチック・メモリーズ-
+Convert kanji?: n
+-ﾌﾟﾗｽﾁｯｸ･ﾒﾓﾘｰｽﾞ-
+Input to Exit: 
 Input content: 煙 草
 Convert kanji?: y
 ｹﾑﾘ ｸｻ
@@ -28,4 +32,4 @@ Convert kanji?: y
 ｱｲｴﾝｷｴﾝ                                 ｲﾁｺﾞｲﾁｴ
 Input to Exit: exit
 ```
-If the configuration is correct on both end, you should see characters appear on the LCD display
+If the configuration is correct on both end, you should see characters appear on the LCD 
