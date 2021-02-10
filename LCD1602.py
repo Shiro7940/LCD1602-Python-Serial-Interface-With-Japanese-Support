@@ -105,27 +105,31 @@ def convmap(string):
     
 def kataconv(content):
     try:                      #Disable mecab by commenting the following 3 lines
-        kanji=input("Convert kanji?: ") 
-        if kanji=="Y"or kanji=="y":
-            content=mecab.parse(content) 
-        content=content.replace("\n","")
-        content=content.replace("‖"," "*32)#act as enter, change num here to fit
-        content=jaconv.z2h(content)
-        print(content)
+        kanji = input("Convert kanji?: ") 
+        if kanji == "Y"or kanji == "y" or kanji == "ｙ" or kanji == "Ｙ":
+            content = mecab.parse(content) 
+        content = content.replace("\n","")
+        content = content.replace("‖"," "*32)#act as enter, change num here to fit
+        content = jaconv.normalize(content)
+        content = jaconv.z2h(content)
+        content = jaconv.hira2hkata(content)
+        print("Output content: "+content)
         return content
     except Exception as error:
         print(error)
 
 def binconv(string):
-    lst=list(string)
-    data=[]
-    digi=[]
+    lst = list(string)
+    data = []
+    digi = []
     for item in lst:
+        item = jaconv.hira2hkata(item)
+        item = jaconv.z2h(item)
         item = convmap(item)
         data.append(item)
     for stri in data:
         try:
-            if len(stri)==1:
+            if len(stri) == 1 and ord(stri)<= 128:
                 digi.append(int(ord(stri)))
             else:
                 digi.append(int(stri,16))
@@ -133,17 +137,27 @@ def binconv(string):
             digi.append(int(255))
     return digi
 
-exit=""
-ser = serial.Serial('COM10', 9600) #change port here
-time.sleep(3)                      #initialize port
-while exit =="":
+exit = ""
+
+try:
+    ser = serial.Serial('COM10', 9600) #change port here
+    time.sleep(3)          #initialize port
+except Exception as error:
+    print(error)
+    exit = input("Input anything to Exit: ")
+    
+while exit  == "":
     try:
-        content=str(input("Input content: "))
+        content = str(input("Input content: "))
         ser.write(bytearray(binconv(kataconv(content))))
-        exit=input("Input to Exit: ")
+        exit = input("Input anything to Exit: ")
     except Exception as error:
         print(error)
-        exit=input("Input to Exit: ")
+        exit = input("Input anything to Exit: ")
 #ser.write(b"\xB1"+b"\xB2"+b"\xD7")
-ser.close()
+
+try:
+    ser.close()
+except:
+    print("Port not found.")
 
